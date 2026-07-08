@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ResearchHistory {
+  id              String            @id @default(uuid())
+  companyName     String
+  tickerSymbol    String?
+  investmentScore Int
+  recommendation  String            // "INVEST", "PASS"
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  analysisDetails AnalysisDetails?
+}
+
+model AnalysisDetails {
+  id                String          @id @default(uuid())
+  researchHistoryId String          @unique
+  
+  // Storing structured data. In PostgreSQL we could use JSONB, but let's stick to Text/String for raw markdown/text or JSON stringified.
+  // Given the requirements "never parse unstructured text if JSON can be returned", these will likely hold serialized JSON or specific text sections.
+  overview          String          @db.Text
+  businessModel     String          @db.Text
+  financials        String          @db.Text
+  marketPosition    String          @db.Text
+  competitors       String          @db.Text
+  latestNews        String          @db.Text
+  growthOps         String          @db.Text
+  risks             String          @db.Text
+  reasoning         String          @db.Text
+  
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  researchHistory   ResearchHistory @relation(fields: [researchHistoryId], references: [id], onDelete: Cascade)
+}

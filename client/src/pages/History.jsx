@@ -21,7 +21,7 @@ const History = () => {
     switch (rec?.toUpperCase()) {
       case 'INVEST': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
       case 'HOLD': return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'PASS': return 'bg-red-100 text-red-800 border-red-200';
+      case 'DONT INVEST': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
@@ -83,7 +83,7 @@ const History = () => {
                   </h3>
                   {report.tickerSymbol && (
                     <span className="text-sm font-mono text-[var(--color-secondary)]">
-                      ${report.tickerSymbol}
+                      #{report.tickerSymbol}
                     </span>
                   )}
                 </div>

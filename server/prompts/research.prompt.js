@@ -16,10 +16,20 @@ Analyze the company across the following dimensions:
 7. Growth Opportunities (Strengths/Catalysts)
 8. Potential Risks (Weaknesses/Threats)
 
-Finally, provide:
-- An Investment Score from 0 to 100 based on fundamentals, valuation, and growth prospects.
-- A final recommendation which MUST be strictly one of: "INVEST", "PASS", or "HOLD".
-- A detailed reasoning for your recommendation.
+To ensure the score and action are accurate and not random predictions, you MUST follow this strict scoring methodology:
+- Rate the following 5 criteria on a scale of 0 to 20:
+  1. Financial Health (0-20)
+  2. Market Moat (0-20)
+  3. Growth Prospects (0-20)
+  4. Risk Profile (0-20 - higher score means lower risk)
+  5. Valuation (0-20 - higher score means better value)
+- The Final 'investmentScore' MUST be the exact sum of these 5 sub-scores (Total out of 100).
+- The 'recommendation' MUST be strictly determined by the final score:
+  - 80 to 100: "INVEST"
+  - 50 to 79: "HOLD"
+  - 0 to 49: "DONT INVEST"
+- The 'reasoning' MUST detail the exact breakdown of the 5 scores and explain the final recommendation.
+- TONE: You must use highly professional, institutional language (like a Wall Street analyst). Do NOT use AI-like phrasing (e.g. "As an AI...", "Here is the breakdown..."). Write directly and authoritatively.
 
 CRITICAL INSTRUCTION:
 You MUST return your response as a strictly valid, parseable JSON object matching this exact structure:
@@ -36,7 +46,7 @@ You MUST return your response as a strictly valid, parseable JSON object matchin
   "risks": "Key weaknesses and potential threats...",
   "investmentScore": 85,
   "recommendation": "INVEST",
-  "reasoning": "Detailed justification for the recommendation..."
+  "reasoning": "Detailed justification for the recommendation including the breakdown of the 5 criteria scores..."
 }}
 
 Ensure there is NO markdown wrapping the JSON, no \`\`\`json blocks, and no conversational text before or after the JSON. Output ONLY raw JSON.

@@ -6,23 +6,57 @@
   --color-accent: #9B5A46;
   --color-background: #FBFBF9;
   --color-card: #F5F3EF;
-  --color-sidebar: #FFFFFF;
+  --color-sidebar: rgba(255, 255, 255, 0.7);
   --color-heading: #1A1A1A;
   --color-secondary: #706F6C;
   --color-border: #E5E2DC;
+  --color-logo: color-mix(in srgb, var(--color-primary) 70%, black);
 
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Poppins', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
+/* Dark Theme Overrides */
+.dark {
+  --color-primary: #E1DCC9;
+  --color-primary-hover: #412D15;
+  --color-accent: #E1DCC9;
+  --color-background: #000000;
+  --color-card: rgba(31, 21, 12, 0.7); /* #1f150c with opacity */
+  --color-sidebar: rgba(0, 0, 0, 0.85); /* #000000 with opacity */
+  --color-heading: #E1DCC9;
+  --color-secondary: #412D15;
+  --color-border: rgba(65, 45, 21, 0.5); /* #412d15 with opacity */
+  --color-logo: #E1DCC9;
+}
+
+/* View Transition API Scaffolding */
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: ease-in-out;
+}
+::view-transition-new(root),
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  display: block;
+}
+
 @layer base {
   body {
     background-color: var(--color-background);
+    background-image: radial-gradient(circle at top right, rgba(45, 58, 45, 0.05), transparent 400px),
+                      radial-gradient(circle at bottom left, rgba(155, 90, 70, 0.05), transparent 400px);
     color: var(--color-heading);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Removed global background transition to prevent View Transition conflicts */
+  *, *::before, *::after {
+    transition: border-color 0.2s ease, color 0.2s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {

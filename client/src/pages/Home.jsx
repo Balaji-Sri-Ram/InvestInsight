@@ -17,7 +17,7 @@ const Home = () => {
     const result = await generateReport(query);
     if (result && result.id) {
       // Navigate to the report page once successfully generated
-      navigate(`/report/${result.id}`);
+      navigate(`/report/${result.id}`, { state: { isNew: true } });
     }
   };
 

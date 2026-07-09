@@ -1,6 +1,9 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useReport } from '../hooks/useReport';
+import { ReportSkeleton } from '../components/ui/Skeleton';
+import { TypewriterText } from '../components/ui/TypewriterText';
+import { AnimatedNumber } from '../components/ui/AnimatedNumber';
 import { Spinner } from '../components/ui/Spinner';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
@@ -10,9 +13,18 @@ import { cn } from '../utils/cn';
 const Report = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isNew = location.state?.isNew === true;
   const { report, loading, error } = useReport(id);
 
   if (loading) {
+    if (isNew) {
+      return (
+        <div className="pt-4 max-w-7xl mx-auto">
+          <ReportSkeleton />
+        </div>
+      );
+    }
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" className="mb-4" />
@@ -52,7 +64,7 @@ const Report = () => {
     switch (rec?.toUpperCase()) {
       case 'INVEST': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
       case 'HOLD': return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'PASS': return 'bg-red-100 text-red-800 border-red-200';
+      case 'DONT INVEST': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
@@ -77,7 +89,7 @@ const Report = () => {
           </h1>
           {tickerSymbol && (
             <span className="inline-flex items-center px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-mono font-medium text-sm">
-              ${tickerSymbol}
+              #{tickerSymbol}
             </span>
           )}
         </div>
@@ -89,7 +101,7 @@ const Report = () => {
             </span>
             <div className="flex items-baseline gap-1">
               <span className={cn("text-4xl font-bold font-heading", getScoreColor(investmentScore))}>
-                {investmentScore}
+                <AnimatedNumber value={investmentScore} disableAnimation={!isNew} />
               </span>
               <span className="text-[var(--color-secondary)] font-medium">/100</span>
             </div>
@@ -120,7 +132,7 @@ const Report = () => {
               Company Overview
             </h2>
             <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed">
-              <p>{analysisDetails?.overview}</p>
+              <p><TypewriterText text={analysisDetails?.overview} speed={2} disableAnimation={!isNew} /></p>
             </div>
           </section>
 
@@ -130,7 +142,7 @@ const Report = () => {
               Business Model
             </h2>
             <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed">
-              <p>{analysisDetails?.businessModel}</p>
+              <p><TypewriterText text={analysisDetails?.businessModel} speed={2} disableAnimation={!isNew} /></p>
             </div>
           </section>
 
@@ -142,7 +154,7 @@ const Report = () => {
             <Card className="bg-white">
               <CardContent className="pt-6">
                 <p className="text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
-                  {analysisDetails?.financials}
+                  <TypewriterText text={analysisDetails?.financials} speed={2} disableAnimation={!isNew} />
                 </p>
               </CardContent>
             </Card>
@@ -151,7 +163,7 @@ const Report = () => {
           <section>
             <h2 className="text-2xl font-semibold mb-4">Final Reasoning</h2>
             <div className="p-6 rounded-xl bg-[var(--color-primary)]/5 border border-[var(--color-primary)]/20 text-[var(--color-heading)] leading-relaxed font-medium">
-              {analysisDetails?.reasoning}
+              <TypewriterText text={analysisDetails?.reasoning} speed={2} disableAnimation={!isNew} />
             </div>
           </section>
           
@@ -169,7 +181,7 @@ const Report = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
-                {analysisDetails?.growthOps}
+                <TypewriterText text={analysisDetails?.growthOps} speed={2} disableAnimation={!isNew} />
               </p>
             </CardContent>
           </Card>
@@ -183,7 +195,7 @@ const Report = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
-                {analysisDetails?.risks}
+                <TypewriterText text={analysisDetails?.risks} speed={2} disableAnimation={!isNew} />
               </p>
             </CardContent>
           </Card>
@@ -199,7 +211,7 @@ const Report = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-[var(--color-secondary)] leading-relaxed">
-              {analysisDetails?.marketPosition}
+              <TypewriterText text={analysisDetails?.marketPosition} speed={2} disableAnimation={!isNew} />
             </p>
           </CardContent>
         </Card>
@@ -210,7 +222,7 @@ const Report = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
-              {analysisDetails?.competitors}
+              <TypewriterText text={analysisDetails?.competitors} speed={2} disableAnimation={!isNew} />
             </p>
           </CardContent>
         </Card>

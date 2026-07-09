@@ -1,25 +1,60 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { cn } from '../utils/cn';
-import { History as HistoryIcon, Home as HomeIcon } from 'lucide-react';
+import { History as HistoryIcon, Home as HomeIcon, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const MainLayout = () => {
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-background)]">
       {/* Top Navbar */}
-      <header className="w-full h-16 bg-[var(--color-sidebar)] border-b border-[var(--color-border)] flex items-center justify-between px-6 shadow-sm sticky top-0 z-10">
-        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          {/* Logo Placeholder */}
-          <div className="w-8 h-8 rounded bg-[var(--color-primary)] flex items-center justify-center text-white font-bold font-heading">
-            I
+      <header className="w-full h-16 bg-[var(--color-sidebar)] backdrop-blur-md border-b border-[var(--color-border)] flex items-center justify-between px-6 shadow-sm sticky top-0 z-10">
+        <Link to="/" className="flex items-center text-[var(--color-logo)] hover:opacity-80 transition-opacity group">
+          <div className="flex items-end">
+            <div 
+              className="h-10 w-7 bg-current shrink-0 -mr-1" 
+              style={{
+                WebkitMaskImage: "url('/I.png')",
+                WebkitMaskSize: "contain",
+                WebkitMaskPosition: "bottom center",
+                WebkitMaskRepeat: "no-repeat",
+                maskImage: "url('/I.png')",
+                maskSize: "contain",
+                maskPosition: "bottom center",
+                maskRepeat: "no-repeat"
+              }}
+            />
+            <span className="font-heading font-bold text-xl tracking-widest leading-none mb-[3px]">NVEST</span>
+            <div 
+              className="h-10 w-7 bg-current shrink-0 -ml-1.5 -mr-1" 
+              style={{
+                WebkitMaskImage: "url('/I.png')",
+                WebkitMaskSize: "contain",
+                WebkitMaskPosition: "bottom center",
+                WebkitMaskRepeat: "no-repeat",
+                maskImage: "url('/I.png')",
+                maskSize: "contain",
+                maskPosition: "bottom center",
+                maskRepeat: "no-repeat"
+              }}
+            />
+            <span className="font-heading font-bold text-xl tracking-widest leading-none mb-[3px]">NSIGHT</span>
           </div>
-          <span className="font-heading font-semibold text-lg text-[var(--color-heading)] tracking-tight">InvestInsight</span>
         </Link>
 
         {/* Navigation Links */}
         <nav className="flex items-center gap-4">
+          <button 
+            onClick={(e) => toggleTheme(e)}
+            className="p-2 rounded-full hover:bg-[var(--color-border)]/50 transition-colors text-[var(--color-secondary)] hover:text-[var(--color-heading)]"
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+          
           <Link 
             to="/" 
             className={cn(

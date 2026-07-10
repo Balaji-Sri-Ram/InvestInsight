@@ -131,8 +131,8 @@ const Report = () => {
               <Briefcase className="w-6 h-6 text-[var(--color-primary)]" />
               Company Overview
             </h2>
-            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed">
-              <p><TypewriterText text={analysisDetails?.overview} speed={2} disableAnimation={!isNew} /></p>
+            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed dark:prose-invert">
+              <TypewriterText text={analysisDetails?.overview} speed={2} disableAnimation={!isNew} />
             </div>
           </section>
 
@@ -141,8 +141,8 @@ const Report = () => {
               <Target className="w-6 h-6 text-[var(--color-primary)]" />
               Business Model
             </h2>
-            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed">
-              <p><TypewriterText text={analysisDetails?.businessModel} speed={2} disableAnimation={!isNew} /></p>
+            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed dark:prose-invert">
+              <TypewriterText text={analysisDetails?.businessModel} speed={2} disableAnimation={!isNew} />
             </div>
           </section>
 
@@ -153,16 +153,16 @@ const Report = () => {
             </h2>
             <Card className="bg-white">
               <CardContent className="pt-6">
-                <p className="text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
+                <div className="text-[var(--color-secondary)] leading-relaxed prose prose-slate max-w-none dark:prose-invert">
                   <TypewriterText text={analysisDetails?.financials} speed={2} disableAnimation={!isNew} />
-                </p>
+                </div>
               </CardContent>
             </Card>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">Final Reasoning</h2>
-            <div className="p-6 rounded-xl bg-[var(--color-primary)]/5 border border-[var(--color-primary)]/20 text-[var(--color-heading)] leading-relaxed font-medium">
+            <div className="p-6 rounded-xl bg-[var(--color-primary)]/5 border border-[var(--color-primary)]/20 text-[var(--color-heading)] leading-relaxed font-medium prose prose-slate max-w-none dark:prose-invert">
               <TypewriterText text={analysisDetails?.reasoning} speed={2} disableAnimation={!isNew} />
             </div>
           </section>
@@ -180,9 +180,9 @@ const Report = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
+              <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
                 <TypewriterText text={analysisDetails?.growthOps} speed={2} disableAnimation={!isNew} />
-              </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -194,9 +194,9 @@ const Report = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
+              <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
                 <TypewriterText text={analysisDetails?.risks} speed={2} disableAnimation={!isNew} />
-              </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -210,9 +210,9 @@ const Report = () => {
             <CardTitle className="text-lg">Market Position</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-[var(--color-secondary)] leading-relaxed">
+            <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
               <TypewriterText text={analysisDetails?.marketPosition} speed={2} disableAnimation={!isNew} />
-            </p>
+            </div>
           </CardContent>
         </Card>
 
@@ -221,9 +221,9 @@ const Report = () => {
             <CardTitle className="text-lg">Competitors</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
+            <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
               <TypewriterText text={analysisDetails?.competitors} speed={2} disableAnimation={!isNew} />
-            </p>
+            </div>
           </CardContent>
         </Card>
       </div>

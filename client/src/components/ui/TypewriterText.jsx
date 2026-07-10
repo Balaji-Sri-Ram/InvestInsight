@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export const TypewriterText = ({ text = '', speed = 5, className = '', onComplete, disableAnimation = false }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -40,10 +42,13 @@ export const TypewriterText = ({ text = '', speed = 5, className = '', onComplet
     return () => clearInterval(interval);
   }, [text, speed, onComplete]);
 
+  const markdownText = isTyping ? displayedText + ' ▍' : displayedText;
+
   return (
-    <span className={className}>
-      {displayedText}
-      {isTyping && <span className="animate-pulse inline-block w-1.5 h-4 ml-1 bg-[var(--color-primary)] align-middle"></span>}
-    </span>
+    <div className={`typewriter-markdown ${className}`}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {markdownText}
+      </ReactMarkdown>
+    </div>
   );
 };

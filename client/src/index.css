@@ -11,7 +11,7 @@
   --color-heading: #1A1A1A;
   --color-secondary: #706F6C;
   --color-border: #E5E2DC;
-  --color-logo: color-mix(in srgb, var(--color-primary) 70%, black);
+  --color-logo: #000000;
 
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Poppins', sans-serif;
@@ -20,16 +20,16 @@
 
 /* Dark Theme Overrides */
 .dark {
-  --color-primary: #E1DCC9;
-  --color-primary-hover: #412D15;
-  --color-accent: #E1DCC9;
-  --color-background: #000000;
-  --color-card: rgba(31, 21, 12, 0.7); /* #1f150c with opacity */
-  --color-sidebar: rgba(0, 0, 0, 0.85); /* #000000 with opacity */
-  --color-heading: #E1DCC9;
-  --color-secondary: #412D15;
-  --color-border: rgba(65, 45, 21, 0.5); /* #412d15 with opacity */
-  --color-logo: #E1DCC9;
+  --color-primary: #C2B280;
+  --color-primary-hover: #A6986A;
+  --color-accent: #C2B280;
+  --color-background: #1a1a1a;
+  --color-card: #282828;
+  --color-sidebar: #282828;
+  --color-heading: #eff1f6;
+  --color-secondary: #9e9e9e;
+  --color-border: #404040;
+  --color-logo: #eff1f6;
 }
 
 /* View Transition API Scaffolding */

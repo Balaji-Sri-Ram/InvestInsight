@@ -12,10 +12,10 @@ const MainLayout = () => {
     <div className="min-h-screen flex flex-col bg-[var(--color-background)]">
       {/* Top Navbar */}
       <header className="w-full h-16 bg-[var(--color-sidebar)] backdrop-blur-md border-b border-[var(--color-border)] flex items-center justify-between px-6 shadow-sm sticky top-0 z-10">
-        <Link to="/" className="flex items-center text-[var(--color-logo)] hover:opacity-80 transition-opacity group">
-          <div className="flex items-end">
+        <Link to="/" className="flex items-center text-[var(--color-primary)] hover:opacity-80 transition-opacity group">
+          <div className="flex items-end text-[var(--color-primary)]">
             <div 
-              className="h-10 w-7 bg-current shrink-0 -mr-1" 
+              className="h-10 w-7 bg-current text-inherit shrink-0 -mr-1" 
               style={{
                 WebkitMaskImage: "url('/I.png')",
                 WebkitMaskSize: "contain",
@@ -27,9 +27,9 @@ const MainLayout = () => {
                 maskRepeat: "no-repeat"
               }}
             />
-            <span className="font-heading font-bold text-xl tracking-widest leading-none mb-[3px]">NVEST</span>
+            <span className="font-heading font-bold text-xl tracking-widest leading-none mb-[3px] text-inherit">NVEST</span>
             <div 
-              className="h-10 w-7 bg-current shrink-0 -ml-1.5 -mr-1" 
+              className="h-10 w-7 bg-current text-inherit shrink-0 -ml-1.5 -mr-1" 
               style={{
                 WebkitMaskImage: "url('/I.png')",
                 WebkitMaskSize: "contain",
@@ -41,7 +41,7 @@ const MainLayout = () => {
                 maskRepeat: "no-repeat"
               }}
             />
-            <span className="font-heading font-bold text-xl tracking-widest leading-none mb-[3px]">NSIGHT</span>
+            <span className="font-heading font-bold text-xl tracking-widest leading-none mb-[3px] text-inherit">NSIGHT</span>
           </div>
         </Link>
 

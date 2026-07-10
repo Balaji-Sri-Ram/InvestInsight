@@ -7,7 +7,7 @@ import { AnimatedNumber } from '../components/ui/AnimatedNumber';
 import { Spinner } from '../components/ui/Spinner';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { ArrowLeft, TrendingUp, TrendingDown, AlertTriangle, Briefcase, Activity, Target } from 'lucide-react';
+import { ArrowLeft, TrendingUp, TrendingDown, AlertTriangle, Briefcase, Activity, Target, Globe, ExternalLink } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 const Report = () => {
@@ -16,6 +16,26 @@ const Report = () => {
   const location = useLocation();
   const isNew = location.state?.isNew === true;
   const { report, loading, error } = useReport(id);
+  const [websiteUrl, setWebsiteUrl] = React.useState('');
+
+  React.useEffect(() => {
+    if (report?.companyName) {
+      const nameLower = report.companyName.toLowerCase();
+      if (nameLower === 'tcs' || nameLower.includes('tata consultancy')) {
+        setWebsiteUrl('https://tcs.com');
+        return;
+      }
+      
+      fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=${encodeURIComponent(report.companyName)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.length > 0 && data[0].domain) {
+            setWebsiteUrl(`https://${data[0].domain}`);
+          }
+        })
+        .catch(console.error);
+    }
+  }, [report?.companyName]);
 
   if (loading) {
     if (isNew) {
@@ -83,15 +103,31 @@ const Report = () => {
       </div>
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--color-border)] pb-8">
-        <div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
+        <div className="flex flex-col gap-4">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             {companyName}
           </h1>
-          {tickerSymbol && (
-            <span className="inline-flex items-center px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-mono font-medium text-sm">
-              #{tickerSymbol}
-            </span>
-          )}
+          <div className="flex flex-wrap items-center gap-3">
+            {tickerSymbol && (
+              <span className="inline-flex items-center px-3 py-1.5 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-mono font-semibold text-sm border border-[var(--color-primary)]/20 shadow-sm transition-all hover:bg-[var(--color-primary)]/20 cursor-default">
+                #{tickerSymbol}
+              </span>
+            )}
+            {websiteUrl && (
+              <a 
+                href={websiteUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-[var(--color-secondary)] hover:text-[var(--color-primary)] font-medium text-sm transition-colors group"
+              >
+                <Globe className="w-4 h-4 mr-1.5 group-hover:scale-110 transition-transform" />
+                <span className="relative pb-0.5 after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-full after:origin-left after:scale-x-0 after:bg-[var(--color-primary)] after:transition-transform after:duration-300 after:ease-out group-hover:after:scale-x-100">
+                  {websiteUrl.replace('https://', '').replace('www.', '')}
+                </span>
+                <ExternalLink className="w-3 h-3 ml-1.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+              </a>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-6">
@@ -151,7 +187,7 @@ const Report = () => {
               <Activity className="w-6 h-6 text-[var(--color-primary)]" />
               Financial Health & Valuation
             </h2>
-            <Card className="bg-white">
+            <Card>
               <CardContent className="pt-6">
                 <div className="text-[var(--color-secondary)] leading-relaxed prose prose-slate max-w-none dark:prose-invert">
                   <TypewriterText text={analysisDetails?.financials} speed={2} disableAnimation={!isNew} />

@@ -11,7 +11,7 @@ model ResearchHistory {
   companyName     String
   tickerSymbol    String?
   investmentScore Int
-  recommendation  String            // "INVEST", "DONT INVEST", "HOLD"
+  recommendation  String            // "INVEST", "PASS"
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   
@@ -24,6 +24,14 @@ model AnalysisDetails {
   
   // Storing structured data. In PostgreSQL we could use JSONB, but let's stick to Text/String for raw markdown/text or JSON stringified.
   // Given the requirements "never parse unstructured text if JSON can be returned", these will likely hold serialized JSON or specific text sections.
+  industry          String?         @db.Text
+  ceo               String?         @db.Text
+  headquarters      String?         @db.Text
+  marketCap         String?         @db.Text
+  totalRevenue      String?         @db.Text
+  netIncome         String?         @db.Text
+  peRatio           String?         @db.Text
+  revenueGrowth     String?         @db.Text
   overview          String          @db.Text
   businessModel     String          @db.Text
   financials        String          @db.Text

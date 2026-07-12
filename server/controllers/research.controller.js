@@ -16,10 +16,50 @@ exports.generateResearch = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Company name is required.' });
     }
 
-    // 1. Call AI Service to generate report
-    const reportData = await ResearchService.generateReport(companyName);
+    // Set headers for SSE
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
 
-    // 2. Save to Database (Prisma)
+    // Helper to send SSE data
+    const sendSSE = (data) => {
+      res.write(`data: ${JSON.stringify(data)}\n\n`);
+    };
+
+    // 1. Check Cache
+    sendSSE({ progress: 'Checking cache...' });
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const cachedReport = await prisma.researchHistory.findFirst({
+      where: {
+        companyName: {
+          equals: companyName,
+          mode: 'insensitive'
+        },
+        createdAt: {
+          gte: twentyFourHoursAgo
+        }
+      },
+      include: {
+        analysisDetails: true
+      }
+    });
+
+    if (cachedReport) {
+      sendSSE({ progress: 'Found cached report.' });
+      sendSSE({ success: true, data: cachedReport });
+      return res.end();
+    }
+
+    // 2. Call AI Service to generate report
+    const onProgress = (msg) => {
+      sendSSE({ progress: msg });
+    };
+
+    const reportData = await ResearchService.generateReport(companyName, onProgress);
+
+    sendSSE({ progress: 'Saving to database...' });
+
+    // 3. Save to Database (Prisma)
     const savedReport = await prisma.researchHistory.create({
       data: {
         companyName: reportData.companyName,
@@ -28,6 +68,14 @@ exports.generateResearch = async (req, res, next) => {
         recommendation: reportData.recommendation,
         analysisDetails: {
           create: {
+            industry: reportData.industry,
+            ceo: reportData.ceo,
+            headquarters: reportData.headquarters,
+            marketCap: reportData.marketCap,
+            totalRevenue: reportData.totalRevenue,
+            netIncome: reportData.netIncome,
+            peRatio: reportData.peRatio,
+            revenueGrowth: reportData.revenueGrowth,
             overview: reportData.overview,
             businessModel: reportData.businessModel,
             financials: reportData.financials,
@@ -45,13 +93,18 @@ exports.generateResearch = async (req, res, next) => {
       }
     });
 
-    // 3. Return response
-    return res.status(201).json({
-      success: true,
-      data: savedReport
-    });
+    // 4. Return final response
+    sendSSE({ progress: 'Done' });
+    sendSSE({ success: true, data: savedReport });
+    return res.end();
   } catch (error) {
-    next(error);
+    console.error(error);
+    // Only send if headers aren't sent, but for SSE we just send the error event
+    if (!res.headersSent) {
+      return next(error);
+    }
+    res.write(`data: ${JSON.stringify({ success: false, message: error.message })}\n\n`);
+    return res.end();
   }
 };
 

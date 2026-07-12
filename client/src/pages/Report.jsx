@@ -7,7 +7,7 @@ import { AnimatedNumber } from '../components/ui/AnimatedNumber';
 import { Spinner } from '../components/ui/Spinner';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { ArrowLeft, TrendingUp, TrendingDown, AlertTriangle, Briefcase, Activity, Target, Globe, ExternalLink } from 'lucide-react';
+import { ArrowLeft, TrendingUp, TrendingDown, AlertTriangle, Briefcase, Activity, Target, Globe, ExternalLink, Building, User, MapPin, Scale, DollarSign, Heart, BarChart2 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 const Report = () => {
@@ -26,7 +26,10 @@ const Report = () => {
         return;
       }
       
-      fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=${encodeURIComponent(report.companyName)}`)
+      // Clean company name for better search results (remove , Inc. Corporation, LLC, etc)
+      const cleanName = report.companyName.replace(/,\s*(inc|llc|ltd|corp)\.?$/i, '').replace(/\s+(inc|llc|ltd|corp|corporation)\.?$/i, '').trim();
+
+      fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=${encodeURIComponent(cleanName)}`)
         .then(res => res.json())
         .then(data => {
           if (data && data.length > 0 && data[0].domain) {
@@ -84,7 +87,7 @@ const Report = () => {
     switch (rec?.toUpperCase()) {
       case 'INVEST': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
       case 'HOLD': return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'DONT INVEST': return 'bg-red-100 text-red-800 border-red-200';
+      case 'PASS': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
@@ -104,7 +107,7 @@ const Report = () => {
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--color-border)] pb-8">
         <div className="flex flex-col gap-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+          <h1 className="text-4xl font-bold tracking-tight">
             {companyName}
           </h1>
           <div className="flex flex-wrap items-center gap-3">
@@ -139,7 +142,7 @@ const Report = () => {
               <span className={cn("text-4xl font-bold font-heading", getScoreColor(investmentScore))}>
                 <AnimatedNumber value={investmentScore} disableAnimation={!isNew} />
               </span>
-              <span className="text-[var(--color-secondary)] font-medium">/100</span>
+              <span className="text-sm text-[var(--color-secondary)] font-medium">/100</span>
             </div>
           </div>
 
@@ -149,10 +152,10 @@ const Report = () => {
             <span className="text-sm font-medium text-[var(--color-secondary)] uppercase tracking-wider mb-2">
               Action
             </span>
-            <span className={cn("px-4 py-1.5 rounded-full font-bold tracking-wide border", getRecommendationColor(recommendation))}>
+            <span className={cn("px-4 py-1.5 text-sm rounded-full font-bold tracking-wide border", getRecommendationColor(recommendation))}>
               {recommendation}
             </span>
-          </div>
+            </div>
         </div>
       </div>
 
@@ -164,41 +167,157 @@ const Report = () => {
           
           <section>
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <Briefcase className="w-6 h-6 text-[var(--color-primary)]" />
+              <Briefcase className="w-5 h-5 text-[var(--color-primary)]" />
               Company Overview
             </h2>
-            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed dark:prose-invert">
-              <TypewriterText text={analysisDetails?.overview} speed={2} disableAnimation={!isNew} />
+            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed">
+              <p><TypewriterText text={analysisDetails?.overview} speed={2} disableAnimation={!isNew} /></p>
             </div>
           </section>
 
+          {/* Quick Info Cards */}
+          {(analysisDetails?.industry || analysisDetails?.ceo || analysisDetails?.headquarters) && (
+            <div className="flex flex-wrap gap-4 pt-2">
+              {analysisDetails?.industry && (
+                <div className="flex-1 min-w-[200px] p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Building className="w-4 h-4 text-[var(--color-secondary)]" />
+                    <span className="text-xs font-bold text-[var(--color-secondary)] uppercase tracking-wider">Industry</span>
+                  </div>
+                  <div className="text-[var(--color-heading)] font-semibold text-sm">
+                    {analysisDetails.industry}
+                  </div>
+                </div>
+              )}
+              
+              {analysisDetails?.ceo && (
+                <div className="flex-1 min-w-[200px] p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-[var(--color-secondary)]" />
+                    <span className="text-xs font-bold text-[var(--color-secondary)] uppercase tracking-wider">CEO</span>
+                  </div>
+                  <div className="text-[var(--color-heading)] font-semibold text-sm">
+                    {analysisDetails.ceo}
+                  </div>
+                </div>
+              )}
+
+              {analysisDetails?.headquarters && (
+                <div className="flex-1 min-w-[200px] p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MapPin className="w-4 h-4 text-[var(--color-secondary)]" />
+                    <span className="text-xs font-bold text-[var(--color-secondary)] uppercase tracking-wider">Headquarters</span>
+                  </div>
+                  <div className="text-[var(--color-heading)] font-semibold text-sm">
+                    {analysisDetails.headquarters}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           <section>
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <Target className="w-6 h-6 text-[var(--color-primary)]" />
+              <Target className="w-5 h-5 text-[var(--color-primary)]" />
               Business Model
             </h2>
-            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed dark:prose-invert">
-              <TypewriterText text={analysisDetails?.businessModel} speed={2} disableAnimation={!isNew} />
+            <div className="prose prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed">
+              <p><TypewriterText text={analysisDetails?.businessModel} speed={2} disableAnimation={!isNew} /></p>
             </div>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-              <Activity className="w-6 h-6 text-[var(--color-primary)]" />
+              <Activity className="w-5 h-5 text-[var(--color-primary)]" />
               Financial Health & Valuation
             </h2>
             <Card>
               <CardContent className="pt-6">
-                <div className="text-[var(--color-secondary)] leading-relaxed prose prose-slate max-w-none dark:prose-invert">
+                <p className="text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
                   <TypewriterText text={analysisDetails?.financials} speed={2} disableAnimation={!isNew} />
-                </div>
+                </p>
+                
+                {/* 5 Financial Metric Boxes */}
+                {(analysisDetails?.marketCap || analysisDetails?.totalRevenue || analysisDetails?.netIncome || analysisDetails?.peRatio || analysisDetails?.revenueGrowth) && (
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-6 pt-6 border-t border-[var(--color-border)]">
+                    
+                    {analysisDetails?.marketCap && (
+                      <div className="flex flex-col p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-[10px] font-bold text-[var(--color-secondary)] uppercase tracking-wider leading-tight">Market<br/>Cap</span>
+                          <div className="p-1 rounded bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                            <Scale className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                        <div className="text-[var(--color-heading)] font-bold text-lg mt-auto leading-none mb-1">{analysisDetails.marketCap}</div>
+                        <div className="text-[10px] text-[var(--color-secondary)] leading-tight">Total market value</div>
+                      </div>
+                    )}
+                    
+                    {analysisDetails?.totalRevenue && (
+                      <div className="flex flex-col p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-[10px] font-bold text-[var(--color-secondary)] uppercase tracking-wider leading-tight">Total<br/>Revenue</span>
+                          <div className="p-1 rounded bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                            <DollarSign className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                        <div className="text-[var(--color-heading)] font-bold text-lg mt-auto leading-none mb-1">{analysisDetails.totalRevenue}</div>
+                        <div className="text-[10px] text-[var(--color-secondary)] leading-tight">Gross top-line (TTM)</div>
+                      </div>
+                    )}
+
+                    {analysisDetails?.netIncome && (
+                      <div className="flex flex-col p-3 rounded-xl border border-[var(--color-border)] bg-emerald-500/5 shadow-sm border-emerald-500/20">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-wider leading-tight">Net<br/>Income</span>
+                          <div className="p-1 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-500">
+                            <Heart className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                        <div className="text-emerald-700 dark:text-emerald-400 font-bold text-lg mt-auto leading-none mb-1">{analysisDetails.netIncome}</div>
+                        <div className="text-[10px] text-emerald-600/70 dark:text-emerald-500/70 leading-tight">Net bottom-line profits</div>
+                      </div>
+                    )}
+
+                    {analysisDetails?.peRatio && (
+                      <div className="flex flex-col p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-[10px] font-bold text-[var(--color-secondary)] uppercase tracking-wider leading-tight">P/E<br/>Ratio</span>
+                          <div className="p-1 rounded bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                            <BarChart2 className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                        <div className="text-[var(--color-heading)] font-bold text-lg mt-auto leading-none mb-1">{analysisDetails.peRatio}</div>
+                        <div className="text-[10px] text-[var(--color-secondary)] leading-tight">Earnings multiple</div>
+                      </div>
+                    )}
+
+                    {analysisDetails?.revenueGrowth && (
+                      <div className="flex flex-col p-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-sm">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-[10px] font-bold text-[var(--color-secondary)] uppercase tracking-wider leading-tight">Revenue<br/>Growth</span>
+                          <div className="p-1 rounded bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                            <TrendingUp className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                        <div className="text-emerald-600 dark:text-emerald-400 font-bold text-lg mt-auto leading-none mb-1">{analysisDetails.revenueGrowth}</div>
+                        <div className="text-[10px] text-[var(--color-secondary)] leading-tight">Year-over-year change</div>
+                      </div>
+                    )}
+
+                  </div>
+                )}
               </CardContent>
             </Card>
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold mb-4">Final Reasoning</h2>
-            <div className="p-6 rounded-xl bg-[var(--color-primary)]/5 border border-[var(--color-primary)]/20 text-[var(--color-heading)] leading-relaxed font-medium prose prose-slate max-w-none dark:prose-invert">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-[var(--color-primary)]" />
+              Final Reasoning
+            </h2>
+            <div className="p-6 rounded-xl bg-[var(--color-primary)]/5 border border-[var(--color-primary)]/20 text-[var(--color-heading)] leading-relaxed font-medium">
               <TypewriterText text={analysisDetails?.reasoning} speed={2} disableAnimation={!isNew} />
             </div>
           </section>
@@ -207,62 +326,129 @@ const Report = () => {
 
         {/* Right Column - SWOT & Market */}
         <div className="space-y-6">
-          
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-emerald-700">
-                <TrendingUp className="w-5 h-5" />
-                Catalysts & Strengths
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
-                <TypewriterText text={analysisDetails?.growthOps} speed={2} disableAnimation={!isNew} />
-              </div>
-            </CardContent>
-          </Card>
+          {(() => {
+            const leftCharCount = (analysisDetails?.overview?.length || 0) + (analysisDetails?.businessModel?.length || 0) + (analysisDetails?.financials?.length || 0) + (analysisDetails?.reasoning?.length || 0);
+            const isMatterLess = leftCharCount < 1800;
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-red-700">
-                <TrendingDown className="w-5 h-5" />
-                Risks & Weaknesses
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
-                <TypewriterText text={analysisDetails?.risks} speed={2} disableAnimation={!isNew} />
-              </div>
-            </CardContent>
-          </Card>
+            return (
+              <>
+                <Card key="news">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Globe className="w-5 h-5 text-[var(--color-primary)]" />
+                      Latest News & Trends
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-[var(--color-secondary)] leading-relaxed text-sm">
+                      <TypewriterText text={analysisDetails?.latestNews} speed={2} disableAnimation={!isNew} />
+                    </p>
+                  </CardContent>
+                </Card>
 
+                <Card key="growth">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-emerald-600">
+                      <TrendingUp className="w-5 h-5" />
+                      Growth Opportunities
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="prose prose-sm prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed prose-li:my-0.5">
+                      <TypewriterText text={analysisDetails?.growthOps} speed={2} disableAnimation={!isNew} />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card key="risks">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-red-500">
+                      <AlertTriangle className="w-5 h-5" />
+                      Risks & Weaknesses
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="prose prose-sm prose-slate max-w-none text-[var(--color-secondary)] leading-relaxed prose-li:my-0.5">
+                      <TypewriterText text={analysisDetails?.risks} speed={2} disableAnimation={!isNew} />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {isMatterLess && (
+                  <>
+                    <Card key="market">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Target className="w-5 h-5 text-[var(--color-primary)]" />
+                          Market Position
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-[var(--color-secondary)] leading-relaxed text-sm">
+                          <TypewriterText text={analysisDetails?.marketPosition} speed={2} disableAnimation={!isNew} />
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card key="competitors">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Activity className="w-5 h-5 text-[var(--color-primary)]" />
+                          Competitors
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-[var(--color-secondary)] leading-relaxed text-sm">
+                          <TypewriterText text={analysisDetails?.competitors} speed={2} disableAnimation={!isNew} />
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </>
+                )}
+              </>
+            );
+          })()}
         </div>
       </div>
 
-      {/* Bottom Section - Market & Competitors */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Market Position</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
-              <TypewriterText text={analysisDetails?.marketPosition} speed={2} disableAnimation={!isNew} />
-            </div>
-          </CardContent>
-        </Card>
+      {/* Bottom Section - Only shown if matter is MORE */}
+      {(() => {
+        const leftCharCount = (analysisDetails?.overview?.length || 0) + (analysisDetails?.businessModel?.length || 0) + (analysisDetails?.financials?.length || 0) + (analysisDetails?.reasoning?.length || 0);
+        if (leftCharCount >= 1800) {
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="w-5 h-5 text-[var(--color-primary)]" />
+                    Market Position
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-[var(--color-secondary)] leading-relaxed">
+                    <TypewriterText text={analysisDetails?.marketPosition} speed={2} disableAnimation={!isNew} />
+                  </p>
+                </CardContent>
+              </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Competitors</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-[var(--color-secondary)] leading-relaxed prose prose-slate prose-sm max-w-none dark:prose-invert">
-              <TypewriterText text={analysisDetails?.competitors} speed={2} disableAnimation={!isNew} />
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-[var(--color-primary)]" />
+                    Competitors
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-[var(--color-secondary)] leading-relaxed whitespace-pre-wrap">
+                    <TypewriterText text={analysisDetails?.competitors} speed={2} disableAnimation={!isNew} />
+                  </p>
+                </CardContent>
+              </Card>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          );
+        }
+        return null;
+      })()}
     </div>
   );
 };

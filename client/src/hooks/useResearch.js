@@ -5,14 +5,18 @@ export const useResearch = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [report, setReport] = useState(null);
+  const [progressMessage, setProgressMessage] = useState('');
 
   const generateReport = async (companyName) => {
     try {
       setLoading(true);
       setError(null);
       setReport(null);
+      setProgressMessage('Starting analysis...');
       
-      const response = await ResearchAPI.generateReport(companyName);
+      const response = await ResearchAPI.generateReport(companyName, (msg) => {
+        setProgressMessage(msg);
+      });
       
       if (response.success) {
         setReport(response.data);
@@ -26,6 +30,7 @@ export const useResearch = () => {
       return null;
     } finally {
       setLoading(false);
+      setProgressMessage('');
     }
   };
 
@@ -34,6 +39,7 @@ export const useResearch = () => {
     loading,
     error,
     report,
+    progressMessage,
     resetError: () => setError(null)
   };
 };

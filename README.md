@@ -1,7 +1,5 @@
 # InvestInsight
 
-**Live Demo:** [invest-insight-ashy.vercel.app](https://invest-insight-ashy.vercel.app)
-
 InvestInsight is an AI-powered financial research tool I built for this assignment. It's designed to give deep insights into companies for investors by pulling data from multiple sources and summarizing it using an LLM. I used Google Gemini as the core AI for this project.
 
 ---
@@ -84,3 +82,9 @@ Here is what my agent output on a few companies I tested:
 
 ## Bonus: LLM Chat Logs
 I included the full transcript of my chat session with the LLM while I was building this project, as requested for the bonus points! You can find the file in this folder named `llm_chat_logs.jsonl`.
+
+---
+
+## Deployment
+
+**Live Demo:** [invest-insight-ashy.vercel.app](https://invest-insight-ashy.vercel.app)

@@ -83,7 +83,6 @@ Here is what my agent output on a few companies I tested:
 ## Bonus: LLM Chat Logs
 I included the full transcript of my chat session with the LLM while I was building this project, as requested for the bonus points! You can find the file in this folder named `llm_chat_logs.jsonl`.
 
----
 
 ## Deployment
 

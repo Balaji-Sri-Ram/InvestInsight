@@ -4,13 +4,7 @@ InvestInsight is an AI-powered financial research tool I built for this assignme
 
 ---
 
-## Overview
-Here is what the application does:
-1. It takes a company name that you type in.
-2. It grabs hard numbers (revenue, net income, PE ratio, stock price, market cap, etc.) using a package called `yahoo-finance2`.
-3. If the company is private or if qualitative context is needed (like competitors, risks, and recent news), it falls back to `Tavily` search to find that information.
-4. It feeds all of this data into `Google Gemini` to analyze the company's financial health, growth opportunities, and risks.
-5. Finally, it generates a structured investment report and shows it on the React frontend.
+
 
 ---
 

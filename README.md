@@ -70,20 +70,6 @@ Here is what the application does:
 
 ---
 
-## Example Runs
-Here is what my agent output on a few companies I tested:
-- **Apple Inc. (Public):** The agent easily pulled the real ticker, revenue, and stock price from Yahoo Finance. Gemini analyzed the data and pointed out that Apple relies a bit too much on iPhone sales, but noted their Services sector is a huge growth opportunity.
-- **OpenAI (Private):** Yahoo Finance couldn't find a ticker, so the agent fell back to Tavily. It searched for recent valuations and revenue estimates. Gemini then wrote a report focusing on their massive growth and AI dominance, but correctly pointed out risks like high compute costs and open-source competitors.
-
-## What I would improve with more time
-- **Saving Reports:** I'd add a dashboard so users could save and look back at old reports.
-- **Charts:** It would be really cool to use a library like Recharts to show stock price history on the frontend.
-- **Multiple AI Agents:** Right now, I just send one big prompt to Gemini. With more time, I'd split this up so one agent does Risk Analysis, another does Financial Analysis, etc., and then combine their work for a better report.
-
-## Bonus: LLM Chat Logs
-I included the full transcript of my chat session with the LLM while I was building this project, as requested for the bonus points! You can find the file in this folder named `llm_chat_logs.jsonl`.
-
-
 ## Deployment
 
 **Live Demo:** [invest-insight-ashy.vercel.app](https://invest-insight-ashy.vercel.app)

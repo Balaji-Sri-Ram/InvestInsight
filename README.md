@@ -55,6 +55,21 @@ Here is what the application does:
   - The `FinancialDataService` tries to get data from Yahoo Finance first. If it can't find it (like for private companies), it falls back to Tavily to search the web for estimates. If all else fails, it just tells Gemini to rely on its own training data.
 - **AI/LLM:** I used `@langchain/google-genai` to take all the context I gathered and send it to Google Gemini to write the final structured JSON report.
 
+
+## Example Runs
+Here is what my agent output on a few companies I tested:
+- **Apple Inc. (Public):** The agent easily pulled the real ticker, revenue, and stock price from Yahoo Finance. Gemini analyzed the data and pointed out that Apple relies a bit too much on iPhone sales, but noted their Services sector is a huge growth opportunity.
+- **OpenAI (Private):** Yahoo Finance couldn't find a ticker, so the agent fell back to Tavily. It searched for recent valuations and revenue estimates. Gemini then wrote a report focusing on their massive growth and AI dominance, but correctly pointed out risks like high compute costs and open-source competitors.
+
+## What I would improve with more time
+- **Saving Reports:** I'd add a dashboard so users could save and look back at old reports.
+- **Charts:** It would be really cool to use a library like Recharts to show stock price history on the frontend.
+- **Multiple AI Agents:** Right now, I just send one big prompt to Gemini. With more time, I'd split this up so one agent does Risk Analysis, another does Financial Analysis, etc., and then combine their work for a better report.
+
+## Bonus: LLM Chat Logs
+I included the full transcript of my chat session with the LLM while I was building this project, as requested for the bonus points! You can find the file in this folder named `llm_chat_logs.jsonl`.
+
+
 ---
 
 ## Key Decisions & Trade-offs
@@ -67,6 +82,7 @@ Here is what the application does:
 ### What I Left Out
 - **Authentication:** To keep things simple and focus on the main AI requirements for the assignment, I didn't build a login system yet.
 - **PDF Export:** I didn't add a button to download the report as a PDF because I wanted to focus entirely on getting the web UI right first.
+
 
 ---
 
